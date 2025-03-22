@@ -102,26 +102,12 @@ public class BankMachine {
   private void deposit(int accountId) {
     System.out.print("Enter deposit amount: ");
     double amount = InputHelper.readDouble();
-    if (amount <= 0) {
-      System.out.println("Deposit amount must be greater than zero.");
-      return;
-    }
     bankingController.deposit(accountId, amount);
-    System.out.println(amount + " EUR deposited.");
   }
 
   private void withdraw(int accountId) {
     System.out.print("Enter withdrawal amount: ");
     double amount = InputHelper.readDouble();
-    if (amount <= 0) {
-      System.out.println("Withdrawal amount must be greater than zero.");
-      return;
-    }
-    boolean success = bankingController.withdraw(accountId, amount);
-    if (success) {
-      System.out.println(amount + " EUR withdrawn.");
-    } else {
-      System.out.println("Insufficient funds.");
-    }
+    bankingController.withdraw(accountId, amount);
   }
 }
