@@ -2,7 +2,7 @@
 
 This is a simple banking simulation that runs as a command-line interface (CLI) application. Users can create a bank account, view their balance, make deposits and withdrawals, and navigate through the program using an interactive menu.
 
-## Features ✨
+## Provided features ✨
 
 - ✅ **Create Account**: Create a new account with an initial balance.
 - ✅ **View Balance**: Check your current account balance.
@@ -13,7 +13,7 @@ This is a simple banking simulation that runs as a command-line interface (CLI) 
 
 1. Clone the repository:
    ```sh
-   git clone <Repository-URL>
+   git clone https://github.com/Vincenzo1301/banking-cli
    ```
 2. Navigate to the project directory:
    ```sh
@@ -27,9 +27,9 @@ This is a simple banking simulation that runs as a command-line interface (CLI) 
     ```sh
    mvn exec:java
     ```
-5. Technologies
+## Technologies 💻
 - Java: Programming language
 - Maven: Build tool for the project
 
-- ## License
+## License
 This project is licensed under the MIT License.
