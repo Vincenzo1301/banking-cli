@@ -1,34 +1,34 @@
-package hm.edu.banking.cli.controller;
+package hm.edu.banking.cli.service;
 
 import hm.edu.banking.cli.model.Account;
 import hm.edu.banking.cli.persistence.AccountStorage;
 
 /**
- * The BankingController class handles the core business logic for banking operations, including
+ * The BankingService class handles the core business logic for banking operations, including
  * creating accounts, verifying accounts, depositing and withdrawing money, and getting account
  * balances.
  */
-public class BankingController {
+public class BankingService {
 
   /** The AccountStorage object that handles the persistence of account data. */
-  private AccountStorage accountStorage = new AccountStorage();
+  private final AccountStorage accountStorage;
+
+  public BankingService(AccountStorage accountStorage) {
+    this.accountStorage = accountStorage;
+  }
 
   /**
    * Creates a new account if it doesn't already exist.
    *
-   * @param id the unique ID of the account to create
    * @param firstName the first name of the account holder
    * @param lastName the last name of the account holder
    * @param balance the initial balance of the account
    * @throws IllegalArgumentException if an account with the given ID already exists
    */
-  public void createAccount(int id, String firstName, String lastName, double balance) {
-    if (accountStorage.readAccount(id) == null) {
-      Account account = new Account(id, firstName, lastName, balance);
-      accountStorage.createAccount(account);
-    } else {
-      throw new IllegalArgumentException("Account already exists.");
-    }
+  public void createAccount(String firstName, String lastName, double balance) {
+    int id = accountStorage.getNextAccountId();
+    Account account = new Account(id, firstName, lastName, balance);
+    accountStorage.createAccount(account);
   }
 
   /**
@@ -64,7 +64,6 @@ public class BankingController {
    *
    * @param id the ID of the account to withdraw from
    * @param amount the amount to withdraw
-   * @return true if the withdrawal is successful, false otherwise (e.g., insufficient funds)
    */
   public void withdraw(int id, double amount) {
     Account account = accountStorage.readAccount(id);
@@ -81,11 +80,10 @@ public class BankingController {
    * Retrieves the balance of the account with the given ID.
    *
    * @param id the ID of the account to retrieve the balance for
-   * @return the current balance of the account
    */
-  public double getBalance(int id) {
+  public void printCurrentBalance(int id) {
     Account account = accountStorage.readAccount(id);
-    return account.getBalance();
+    System.out.println("Current balance: " + account.getBalance() + " EUR");
   }
 
   /**

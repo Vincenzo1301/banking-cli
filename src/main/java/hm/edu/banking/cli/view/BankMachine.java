@@ -1,14 +1,21 @@
 package hm.edu.banking.cli.view;
 
-import hm.edu.banking.cli.controller.BankingController;
+import static java.lang.String.valueOf;
+
+import hm.edu.banking.cli.command.Command;
+import hm.edu.banking.cli.command.CommandFactory;
+import hm.edu.banking.cli.persistence.impl.InMemoryAccountStorage;
+import hm.edu.banking.cli.service.BankingService;
 import hm.edu.banking.cli.util.InputHelper;
 
 public class BankMachine {
 
-  private final BankingController bankingController;
+  private final BankingService bankingService;
+  private final CommandFactory factory;
 
   public BankMachine() {
-    this.bankingController = new BankingController();
+    this.bankingService = new BankingService(new InMemoryAccountStorage());
+    this.factory = new CommandFactory(bankingService);
   }
 
   public void start() {
@@ -47,8 +54,7 @@ public class BankMachine {
     System.out.println("Please enter your initial balance: ");
     double balance = InputHelper.readDouble();
 
-    int nextAccountId = bankingController.getNextAccountId();
-    bankingController.createAccount(nextAccountId, firstName, lastName, balance);
+    bankingService.createAccount(firstName, lastName, balance);
     System.out.println("Account created successfully!");
   }
 
@@ -56,7 +62,7 @@ public class BankMachine {
     System.out.print("Please enter your account ID: ");
     int accountId = InputHelper.readInt();
 
-    boolean exists = bankingController.verifyAccount(accountId);
+    boolean exists = bankingService.verifyAccount(accountId);
     if (!exists) {
       System.out.println("Account does not exist. Please try again.");
       return;
@@ -95,19 +101,23 @@ public class BankMachine {
   }
 
   private void showBalance(int accountId) {
-    double balance = bankingController.getBalance(accountId);
-    System.out.println("Current balance: " + balance + " EUR");
+    Command command = factory.getCommand("balance");
+    command.execute(valueOf(accountId));
   }
 
   private void deposit(int accountId) {
     System.out.print("Enter deposit amount: ");
     double amount = InputHelper.readDouble();
-    bankingController.deposit(accountId, amount);
+
+    Command command = factory.getCommand("deposit");
+    command.execute(valueOf(accountId), valueOf(amount));
   }
 
   private void withdraw(int accountId) {
     System.out.print("Enter withdrawal amount: ");
     double amount = InputHelper.readDouble();
-    bankingController.withdraw(accountId, amount);
+
+    Command command = factory.getCommand("withdraw");
+    command.execute(valueOf(accountId), valueOf(amount));
   }
 }

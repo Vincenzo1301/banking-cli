@@ -1,53 +1,35 @@
 package hm.edu.banking.cli.persistence;
 
 import hm.edu.banking.cli.model.Account;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * The AccountStorage class manages the storage and retrieval of account objects. It provides
- * methods to create new accounts, read existing accounts, and maintain a list of all accounts along
- * with a unique account ID generator.
+ * The AccountStorage interface defines the methods for handling account persistence. It provides
+ * methods to read, create, and retrieve account IDs. Implementations of this interface manage the
+ * storage and retrieval of account data, whether it's stored in memory, a database, or other
+ * systems.
  */
-public class AccountStorage {
-
-  /** A list that stores all the account objects. */
-  private final List<Account> accounts = new ArrayList<>();
-
-  /** The next available account ID to be assigned when a new account is created. */
-  private int nextAccountId = 1;
+public interface AccountStorage {
 
   /**
-   * Gets the next available account ID.
+   * Retrieves the account associated with the given account ID.
    *
-   * @return the next available account ID
+   * @param id the unique ID of the account to retrieve
+   * @return the Account object corresponding to the given ID, or null if no account exists with the
+   *     specified ID
    */
-  public int getNextAccountId() {
-    return nextAccountId;
-  }
+  Account readAccount(int id);
 
   /**
-   * Creates a new account by adding it to the storage and increments the next account ID.
+   * Creates a new account and stores it.
    *
-   * @param account the account to be created and added to storage
+   * @param account the Account object to be created and stored
    */
-  public void createAccount(Account account) {
-    accounts.add(account);
-    nextAccountId++;
-  }
+  void createAccount(Account account);
 
   /**
-   * Reads an account from the storage based on its unique account ID.
+   * Retrieves the next available unique account ID.
    *
-   * @param id the ID of the account to retrieve
-   * @return the account with the specified ID, or null if no account with the given ID is found
+   * @return the next available account ID to be used when creating a new account
    */
-  public Account readAccount(int id) {
-    for (Account account : accounts) {
-      if (account.getId() == id) {
-        return account;
-      }
-    }
-    return null;
-  }
+  int getNextAccountId();
 }

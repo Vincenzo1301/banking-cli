@@ -1,19 +1,20 @@
-package hm.edu.banking.cli;
+package hm.edu.banking.cli.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import hm.edu.banking.cli.persistence.AccountStorage;
+import hm.edu.banking.cli.model.Account;
+import hm.edu.banking.cli.persistence.impl.InMemoryAccountStorage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AccountStorageTest {
+public class InMemoryAccountStorageTest {
 
-  private final AccountStorage accountStorage = new AccountStorage();
+  private final AccountStorage accountStorage = new InMemoryAccountStorage();
 
   @Test
   void shouldCreateAccount() {
     // given
-    Account account = new Account();
+    Account account = new Account(1, "John", "Doe", 100);
     // when
     accountStorage.createAccount(account);
     // then
@@ -24,7 +25,7 @@ public class AccountStorageTest {
   @Test
   void shouldReadAccount() {
     // given
-    Account account = new Account();
+    Account account = new Account(1, "John", "Doe", 100);
     accountStorage.createAccount(account);
     // when
     Account readAccount = accountStorage.readAccount(account.getId());
@@ -35,7 +36,7 @@ public class AccountStorageTest {
   @Test
   void shouldReturnNullWhenAccountDoesNotExist() {
     // given
-    Account account = new Account();
+    Account account = new Account(1, "John", "Doe", 100);
     // when
     Account readAccount = accountStorage.readAccount(account.getId());
     // then
@@ -45,23 +46,11 @@ public class AccountStorageTest {
   @Test
   void shouldReturnNextAccountId() {
     // given
-    Account account = new Account();
+    Account account = new Account(1, "John", "Doe", 100);
     accountStorage.createAccount(account);
     // when
     int nextAccountId = accountStorage.getNextAccountId();
     // then
     assertEquals(account.getId() + 1, nextAccountId);
-  }
-
-  @Test
-  void shouldIncrementNextAccountId() {
-    // given
-    Account account1 = new Account();
-    Account account2 = new Account();
-    // when
-    accountStorage.createAccount(account1);
-    accountStorage.createAccount(account2);
-    // then
-    assertEquals(account1.getId() + 1, account2.getId());
   }
 }
